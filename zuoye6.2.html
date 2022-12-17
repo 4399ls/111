@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .signal-light {
+            width: 400px;
+            margin: 100px auto 0;
+        }
+        
+        .light {
+            display: flex;
+            margin: 0 auto;
+            width: 140px;
+            height: 500px;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 70px;
+            background-color: #333;
+        }
+        
+        .light div {
+            width: 100px;
+            height: 100px;
+            margin-top: 20px;
+            border-radius: 100px;
+            background-color: #eee;
+        }
+        
+        .light div.countdown {
+            text-align: center;
+            font-size: 48px;
+            line-height: 100px;
+        }
+        
+        #red.active {
+            background-color: red;
+        }
+        
+        #yellow.active {
+            background-color: yellow;
+        }
+        
+        #green.active {
+            background-color: green;
+        }
+    </style>
+
+    <body>
+
+        <div class="signal-light">
+            <div class="light">
+                <div id="red"></div>
+                <div id="yellow"></div>
+                <div id="green"></div>
+                <div class="countdown" id="countdown"></div>
+            </div>
+        </div>
+    </body>
+    <script>
+        // 获取ID
+        function getELeById(id) {
+            return document.getElementById(id);
+        }
+        // 信号灯构造函数
+        function SignalLight(ele, timeout, nextLight) {
+            this.ele = ele;
+            this.timeout = timeout;
+            this.nextLight = nextLight;
+        }
+        SignalLight.prototype.clearColor = function() {
+                this.ele.className = '';
+            }
+            // 修改信号灯的颜色
+        SignalLight.prototype.changeColor = function() {
+            this.ele.className = 'active';
+        }
+        SignalLight.prototype.changeNum = function(num) {
+            getELeById('countdown').innerHTML = num < 10 ? '0' + num : num;
+        }
+        var red = new SignalLight(getELeById('red'), 30, 'green');
+        var yellow = new SignalLight(getELeById('yellow'), 5, 'red');
+        var green = new SignalLight(getELeById('green'), 35, 'yellow');
+        var nowLight = green;
+        var timeout = nowLight.timeout;
+        nowLight.changeColor();
+        nowLight.changeNum(timeout);
+        setInterval(function() {
+            --timeout;
+            if (timeout <= 0) {
+                nowLight.clearColor();
+                nowLight = window[nowLight.nextLight];
+                timeout = nowLight.timeout;
+                nowLight.changeColor();
+            }
+            nowLight.changeNum(timeout);
+        }, 1000);
+    </script>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.1</title>
+
+    <body></body>
+    <script>
+        let print = new Print()
+        print.task(1000, () => {
+            console.log(1)
+        }).task(1000, () => {
+            console.log(2)
+        }).task(1000, () => {
+            console.log(3)
+        }).start()
+
+        function Print() {
+            this.list = []
+            this.task = (time, fn) => {
+                this.list.push({
+                    fn,
+                    time
+                })
+                return this
+            }
+            this.start = () => {
+                if (this.list.length > 0) {
+                    let temp = this.list.shift()
+                    let self = this
+                    setTimeout(function() {
+                        temp.fn()
+                        self.start()
+                    }, temp.time)
+                }
+            }
+        }
+    </script>
+
+</html>
